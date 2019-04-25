@@ -14,7 +14,7 @@ public class PhysicsBody : MonoBehaviour {
 
     public CollisionsInfo Collisions;
 
-    private void Awake() 
+    protected void Awake() 
     {
         _collider = GetComponent<BoxCollider>();
     }

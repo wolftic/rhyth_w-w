@@ -8,9 +8,15 @@ public class Gestures : MonoBehaviour
     private Vector2 _touchEndPos;
 
     [SerializeField]
-    private float _minSwipeDistance;
+    private float _minSwipeDistanceX, _minSwipeDistanceY;
 
     public System.Action<SwipeType> OnSwipe;
+
+    void Awake()
+    {
+        _minSwipeDistanceX = Screen.width * 0.1f;
+        _minSwipeDistanceY = Screen.height * 0.1f;
+    }
 
     private void Update()
     {
@@ -23,7 +29,7 @@ public class Gestures : MonoBehaviour
             _touchEndPos = TouchPos();
             Vector3 delta = _touchEndPos - _touchStartPos;
 
-            if (Mathf.Abs(delta.x) > _minSwipeDistance)
+            if (Mathf.Abs(delta.x) > _minSwipeDistanceX)
             {
                 if (delta.x > 0)
                 {
@@ -34,7 +40,7 @@ public class Gestures : MonoBehaviour
                     DoSwipe(SwipeType.LEFT);
                 }
             }
-            if (Mathf.Abs(delta.y) > _minSwipeDistance)
+            if (Mathf.Abs(delta.y) > _minSwipeDistanceY)
             {
                 if (delta.y > 0)
                 {
