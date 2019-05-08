@@ -12,7 +12,6 @@ public class PhysicsPlayer : PhysicsBody {
 
     private float _gravity = -9.8f;
     
-    private Gestures _gestures;
     private Animator _animation;
     private SpriteRenderer _renderer;
     
@@ -22,14 +21,13 @@ public class PhysicsPlayer : PhysicsBody {
 
     private void Awake() {
         base.Awake();
-        _gestures = GetComponent<Gestures>();
         _animation = GetComponent<Animator>();
         _renderer = GetComponent<SpriteRenderer>();
     }
 
     void Start()
     {
-        _gestures.OnSwipe += OnSwipe;
+        GestureController.Instance.OnSwipe += OnSwipe;
     }
 
     private void OnSwipe(SwipeType type)
@@ -78,26 +76,9 @@ public class PhysicsPlayer : PhysicsBody {
     }
 
     private void OnDestroy() {
-        _gestures.OnSwipe -= OnSwipe;
+        if (GestureController.HasInstance()) 
+        {
+            GestureController.Instance.OnSwipe -= OnSwipe;
+        }
     }
-
-    // private void Update() {
-    //     if (Collisions.top || Collisions.bottom) {
-	// 		_velocity.y = 0;
-         
-    //         if (Input.GetKeyDown(KeyCode.Space)) {
-    //             float final = 0f;
-    //             float squaredAcceleration = final - 2 * _gravity * _jumpHeight;
-    //             float acceleration = Mathf.Sqrt(squaredAcceleration);
-    //             _velocity.y = acceleration;
-    //         }
-	// 	}
-
-    //     float x = Input.GetAxis("Horizontal") * 5f;
-    //     _velocity.x = x;
-
-    //     _velocity.y += _gravity * Time.deltaTime;
-
-    //     this.Move(_velocity * Time.deltaTime);
-    // }
 }

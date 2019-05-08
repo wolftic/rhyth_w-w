@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gestures : MonoBehaviour
+public class GestureController : Singleton<GestureController>
 {
     private Vector2 _touchStartPos;
     private Vector2 _touchEndPos;
