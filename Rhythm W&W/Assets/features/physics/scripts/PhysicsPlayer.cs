@@ -7,10 +7,12 @@ public class PhysicsPlayer : PhysicsBody {
     private Vector3 _velocity;
     [SerializeField]
     private float _jumpHeight;
+
     [SerializeField]
+    private float _timeForRound = 5f;
     private float _moveSpeed;
 
-    private float _gravity = -9.8f;
+    private float _gravity = -50f;
     
     private Animator _animation;
     private SpriteRenderer _renderer;
@@ -27,6 +29,7 @@ public class PhysicsPlayer : PhysicsBody {
 
     void Start()
     {
+        _moveSpeed = (2 * Mathf.PI) / _timeForRound * 5;
         GestureController.Instance.OnSwipe += OnSwipe;
     }
 
@@ -51,7 +54,7 @@ public class PhysicsPlayer : PhysicsBody {
 
     private void Update() 
     {
-        if (Collisions.top || Collisions.bottom) {
+        if (/*Collisions.top ||  */Collisions.bottom) {
 			_velocity.y = 0;
 		} else {
             _jumpAcceleration = 0;
@@ -68,6 +71,18 @@ public class PhysicsPlayer : PhysicsBody {
 
         HandleAnimations();
         this.Move(_velocity * Time.deltaTime);
+    }
+
+    public override void Move(Vector3 velocity)
+    {
+        base.Move(velocity);
+
+        Vector3 position = transform.position;
+        Vector3 xz = position;
+                xz.y = 0;
+        
+        transform.rotation = Quaternion.LookRotation(-xz, Vector3.up);
+        transform.position = xz.normalized * 2.55f + Vector3.up * position.y;
     }
 
     private void HandleAnimations() {        

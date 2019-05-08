@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PhysicsBody : MonoBehaviour {
-
+public abstract class PhysicsBody : MonoBehaviour {
     private const int _raycastWidth = 5;
     private const float _skinWidth = 0.015f;
 
@@ -42,15 +41,15 @@ public class PhysicsBody : MonoBehaviour {
         {
             for (int y = 0; y < _raycastWidth; y++)
             {
-                rayLeft = Vector3.left * Mathf.Lerp(-halfWidth, halfWidth, (float)x / (_raycastWidth - 1f));
-                rayForward = Vector3.forward * Mathf.Lerp(-halfDepth, halfDepth, (float)y / (_raycastWidth - 1f));
+                rayLeft = -transform.right * Mathf.Lerp(-halfWidth, halfWidth, (float)x / (_raycastWidth - 1f));
+                rayForward = transform.forward * Mathf.Lerp(-halfDepth, halfDepth, (float)y / (_raycastWidth - 1f));
                 rayOrigin = origin + rayLeft + rayForward - (Vector3.up * _skinWidth * directionY);
 
                 color = Color.Lerp(Color.Lerp(Color.red, Color.green, x / (_raycastWidth - 1f)), 
                                          Color.Lerp(Color.magenta, Color.yellow, y / (_raycastWidth - 1f)),
                                         (x + y) / (_raycastWidth * 2f -2));
 
-                bool hit = Physics.Raycast(rayOrigin, Vector3.up * directionY, out hitInfo, rayLength, _layermask);
+                bool hit = Physics.Raycast(rayOrigin, Vector3.up * Mathf.Min(directionY, 0), out hitInfo, rayLength, _layermask);
 
                 if (hit) {
                     velocity.y = (hitInfo.distance - _skinWidth) * directionY;
@@ -75,7 +74,7 @@ public class PhysicsBody : MonoBehaviour {
         float rayLength = Mathf.Abs(velocity.x) + _skinWidth;
         float directionX = Mathf.Sign(velocity.x);       
 
-        Vector3 origin = transform.position + _collider.center + (Vector3.right * directionX * _collider.size.x / 2) * transform.localScale.x;
+        Vector3 origin = transform.position + _collider.center + (transform.right * directionX * _collider.size.x / 2) * transform.localScale.x;
         float halfWidth = _collider.size.z / 2f * transform.localScale.z;
         float halfDepth = _collider.size.y / 2f * transform.localScale.y;
 
@@ -83,15 +82,15 @@ public class PhysicsBody : MonoBehaviour {
         {
             for (int y = 0; y < _raycastWidth; y++)
             {
-                rayForward = Vector3.forward * Mathf.Lerp(-halfWidth, halfWidth, (float)x / (_raycastWidth - 1f));
+                rayForward = transform.forward * Mathf.Lerp(-halfWidth, halfWidth, (float)x / (_raycastWidth - 1f));
                 rayUp = Vector3.up * Mathf.Lerp(-halfDepth, halfDepth, (float)y / (_raycastWidth - 1f));
-                rayOrigin = origin + rayForward + rayUp - (Vector3.right * _skinWidth * directionX);
+                rayOrigin = origin + rayForward + rayUp - (transform.right * _skinWidth * directionX);
 
                 color = Color.Lerp(Color.Lerp(Color.red, Color.green, x / (_raycastWidth - 1f)), 
                                          Color.Lerp(Color.magenta, Color.yellow, y / (_raycastWidth - 1f)),
                                         (x + y) / (_raycastWidth * 2f -2));
 
-                bool hit = Physics.Raycast(rayOrigin, Vector3.right * directionX, out hitInfo, rayLength, _layermask);
+                bool hit = Physics.Raycast(rayOrigin, transform.right * directionX, out hitInfo, rayLength, _layermask);
 
                 if (hit) {
                     velocity.x = (hitInfo.distance - _skinWidth) * directionX;
@@ -101,13 +100,13 @@ public class PhysicsBody : MonoBehaviour {
                     Collisions.left = directionX == -1;
                 }
 
-			    Debug.DrawRay(rayOrigin, Vector3.right * directionX * rayLength, color);
+			    Debug.DrawRay(rayOrigin, transform.right * directionX * rayLength, color);
             }
         }
 
     }
 
-    public void Move(Vector3 velocity) 
+    public virtual void Move(Vector3 velocity) 
     {
         Collisions.Reset();
 
