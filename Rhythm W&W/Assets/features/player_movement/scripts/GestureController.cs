@@ -29,17 +29,6 @@ public class GestureController : Singleton<GestureController>
             _touchEndPos = TouchPos();
             Vector3 delta = _touchEndPos - _touchStartPos;
 
-            if (Mathf.Abs(delta.x) > _minSwipeDistanceX)
-            {
-                if (delta.x > 0)
-                {
-                    DoSwipe(SwipeType.RIGHT);
-                }
-                else
-                {
-                    DoSwipe(SwipeType.LEFT);
-                }
-            }
             if (Mathf.Abs(delta.y) > _minSwipeDistanceY)
             {
                 if (delta.y > 0)
@@ -49,6 +38,17 @@ public class GestureController : Singleton<GestureController>
                 else
                 {
                     DoSwipe(SwipeType.DOWN);
+                }
+            }
+            else if (Mathf.Abs(delta.x) > _minSwipeDistanceX)
+            {
+                if (delta.x > 0)
+                {
+                    DoSwipe(SwipeType.RIGHT);
+                }
+                else
+                {
+                    DoSwipe(SwipeType.LEFT);
                 }
             }
         }
