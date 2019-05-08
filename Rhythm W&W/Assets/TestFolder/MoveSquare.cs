@@ -1,14 +1,15 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveSquare : MonoBehaviour {
+public class MoveSquare : Singleton<MoveSquare> {
     public AudioSource audioSource;
     public float updateStep = 0.1f;
     public int sampleDataLength = 1024;
     public GameObject level;
     private float currentUpdateTime = 0f;
-
+    public Action OnPlummet;
     private float clipLoudness;
     private float[] clipSampleData;
     void Awake()
@@ -21,7 +22,6 @@ public class MoveSquare : MonoBehaviour {
         clipSampleData = new float[sampleDataLength];
         Renderer renderer = level.GetComponent<Renderer>();
         float radius = renderer.bounds.extents.magnitude;
-        print(radius);
     }
 
     void Update()
@@ -42,6 +42,7 @@ public class MoveSquare : MonoBehaviour {
             {
                 level.transform.localEulerAngles += new Vector3(0, clipLoudness * 3);
                 level.transform.position -= new Vector3(0, clipLoudness / 10);
+                OnPlummet();
             }
             else
             {
