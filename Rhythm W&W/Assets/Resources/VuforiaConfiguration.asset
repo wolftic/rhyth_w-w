@@ -43,8 +43,10 @@ MonoBehaviour:
       FieldOfView: {x: 0, y: 0, z: 0, w: 0}
       ContainsMagnet: 0
   databaseLoad:
-    dataSetsToLoad: []
-    dataSetsToActivate: []
+    dataSetsToLoad:
+    - MarkerPvB
+    dataSetsToActivate:
+    - MarkerPvB
   videoBackground:
     clippingMode: 0
     numDivisions: 2
@@ -66,5 +68,5 @@ MonoBehaviour:
   webcam:
     deviceNameSetInEditor: Logitech Camera
     flipHorizontally: 0
-    turnOffWebCam: 1
+    turnOffWebCam: 0
     renderTextureLayer: 30
