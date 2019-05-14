@@ -17,6 +17,6 @@ public class ParticleController : MonoBehaviour {
 	}
     public void BurstParticles()
     {
-        _particleSystem.Emit( 10 );
+        _particleSystem.Emit( 5 );
     }
 }

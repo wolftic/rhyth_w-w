@@ -7,14 +7,14 @@ public class MoveSquare : Singleton<MoveSquare> {
     public AudioSource audioSource;
     public float updateStep = 0.1f;
     public int sampleDataLength = 1024;
-    public GameObject level;
+    private GameObject level;
     private float currentUpdateTime = 0f;
     public Action OnPlummet;
     private float clipLoudness;
     private float[] clipSampleData;
     void Awake()
     {
-
+        level = this.gameObject;
         if (!audioSource)
         {
             Debug.LogError(GetType() + ".Awake: there was no audioSource set.");
@@ -27,10 +27,6 @@ public class MoveSquare : Singleton<MoveSquare> {
     void Update()
     {
 
-        currentUpdateTime += Time.deltaTime;
-        if (currentUpdateTime >= updateStep)
-        {
-            currentUpdateTime = 0f;
             audioSource.clip.GetData(clipSampleData, audioSource.timeSamples);
             clipLoudness = 0f;
             foreach (var sample in clipSampleData)
@@ -40,15 +36,15 @@ public class MoveSquare : Singleton<MoveSquare> {
             clipLoudness /= sampleDataLength; 
             if (clipLoudness >= 0.22f)
             {
-                level.transform.localEulerAngles += new Vector3(0, clipLoudness * 3);
-                level.transform.position -= new Vector3(0, clipLoudness / 10);
+                level.transform.localEulerAngles += new Vector3(0, 0.75f);
+                level.transform.position -= new Vector3(0, 0.1f);
                 OnPlummet();
             }
             else
             {
-                level.transform.localEulerAngles += new Vector3(0, 0.4f);
+            level.transform.position -= new Vector3(0, 0.005f);
+            level.transform.localEulerAngles += new Vector3(0, 0.3f);
             }
-        }
 
     }
 }
