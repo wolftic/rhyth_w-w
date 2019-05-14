@@ -22,7 +22,6 @@ GameObject:
   - component: {fileID: 212056311880113336}
   - component: {fileID: 95798153876563420}
   - component: {fileID: 114220778359417392}
-  - component: {fileID: 114234143649062072}
   - component: {fileID: 65986189738081470}
   m_Layer: 8
   m_Name: Player
@@ -55,13 +54,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1288757874691566}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalRotation: {x: 0.08072077, y: 0, z: 0, w: 0.99673676}
+  m_LocalPosition: {x: 0, y: 2.15, z: -10.62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4367102609433700}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 9.26, y: 0, z: 0}
 --- !u!4 &4367102609433700
 Transform:
   m_ObjectHideFlags: 1
@@ -69,7 +68,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1245048023389728}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.051999986, y: 1.78, z: 0}
+  m_LocalPosition: {x: -3.37, y: 1.5, z: -1.64}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4337146775123484}
@@ -95,7 +94,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 1
+  orthographic: 0
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
@@ -122,7 +121,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.392, y: 1.488, z: 0.2}
+  m_Size: {x: 1.392, y: 1.488, z: 0.1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!81 &81519157682167786
 AudioListener:
@@ -164,20 +163,7 @@ MonoBehaviour:
     m_Bits: 1
   _velocity: {x: 0, y: 0, z: 0}
   _jumpHeight: 5
-  _moveSpeed: 2
---- !u!114 &114234143649062072
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1245048023389728}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4aab139a08b25da49b411490faa43fb0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _minSwipeDistanceX: 0
-  _minSwipeDistanceY: 0
+  _timeForRound: 7.5
 --- !u!124 &124480976159281274
 Behaviour:
   m_ObjectHideFlags: 1
@@ -219,7 +205,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 25d758e973ae6d549abeda084240df40, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 47a85078f2074054f91493a6fe370d7e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
