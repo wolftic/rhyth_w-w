@@ -82,7 +82,7 @@ public class PhysicsPlayer : PhysicsBody {
                 xz.y = 0;
         
         transform.rotation = Quaternion.LookRotation(-xz, Vector3.up);
-        transform.position = xz.normalized * 2.55f + Vector3.up * position.y;
+        transform.position = xz.normalized * 2.5f + Vector3.up * position.y;
     }
 
     private void HandleAnimations() {        
