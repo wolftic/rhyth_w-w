@@ -47,8 +47,6 @@ public class MusicController : Singleton<MusicController> {
         
         _clipLoudness /= _sampleDataLength; 
 
-        Debug.Log(_clipLoudness);
-        
         if (_clipLoudness >= _clipLoudnessTreshold)
         {
             if (OnSoundBurst != null) OnSoundBurst();

@@ -20,7 +20,6 @@ public class PhysicsPlayer : PhysicsBody {
     private int _direction = 1;
     private float _jumpAcceleration;
 
-
     private void Awake() {
         base.Awake();
         _animation = GetComponent<Animator>();
@@ -31,6 +30,12 @@ public class PhysicsPlayer : PhysicsBody {
     {
         _moveSpeed = (2 * Mathf.PI) / _timeForRound * 5;
         GestureController.Instance.OnSwipe += OnSwipe;
+        TowerController.Instance.OnMoveTower += OnMove;
+    }
+
+    private void OnMove(float plummetSpeed, float rotationSpeed) 
+    {
+        transform.Translate(Vector3.up * plummetSpeed * Time.deltaTime);
     }
 
     private void OnSwipe(SwipeType type)
@@ -41,7 +46,6 @@ public class PhysicsPlayer : PhysicsBody {
                 float final = 0f;
                 float squaredAcceleration = final - 2 * _gravity * _jumpHeight;
                 _jumpAcceleration = Mathf.Sqrt(squaredAcceleration);
-                _animation.SetTrigger("jump");
             break;
             case SwipeType.LEFT:
                 _direction = -1;
@@ -54,9 +58,11 @@ public class PhysicsPlayer : PhysicsBody {
 
     private void Update() 
     {
-        if (/*Collisions.top ||  */Collisions.bottom) {
+        if (Collisions.bottom) {
 			_velocity.y = 0;
+            Debug.Log("can jump");
 		} else {
+            Debug.Log("can't jump");
             _jumpAcceleration = 0;
         }
 
@@ -64,6 +70,7 @@ public class PhysicsPlayer : PhysicsBody {
 
         if (_jumpAcceleration > 0) {
             _velocity.y = _jumpAcceleration;
+            _animation.SetTrigger("jump");
             _jumpAcceleration = 0;
         }
         
@@ -95,5 +102,10 @@ public class PhysicsPlayer : PhysicsBody {
         {
             GestureController.Instance.OnSwipe -= OnSwipe;
         }
+        
+        if (TowerController.HasInstance()) 
+        {
+            TowerController.Instance.OnMoveTower -= OnMove;
+        }  
     }
 }

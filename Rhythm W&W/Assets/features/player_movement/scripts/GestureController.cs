@@ -60,7 +60,6 @@ public class GestureController : Singleton<GestureController>
         {
             OnSwipe(type);
         }
-        Debug.Log(type.ToString());
     }
 
     private bool TouchBegin()
