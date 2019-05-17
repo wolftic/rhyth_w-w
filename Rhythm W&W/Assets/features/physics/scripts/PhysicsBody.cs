@@ -13,6 +13,8 @@ public abstract class PhysicsBody : MonoBehaviour {
 
     public CollisionsInfo Collisions;
 
+    internal bool ignorePhysics = false;
+
     protected void Awake() 
     {
         _collider = GetComponent<BoxCollider>();
@@ -110,8 +112,11 @@ public abstract class PhysicsBody : MonoBehaviour {
     {
         Collisions.Reset();
 
-        CalculatePhysics(ref velocity);
-        
+        if (!ignorePhysics) 
+        {
+            CalculatePhysics(ref velocity);
+        }
+
         transform.Translate(velocity);
     }
 

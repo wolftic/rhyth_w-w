@@ -7,6 +7,8 @@ public class PhysicsPlayer : PhysicsBody {
     private Vector3 _velocity;
     [SerializeField]
     private float _jumpHeight;
+    [SerializeField]
+    private float _deadJumpHeight;
 
     [SerializeField]
     private float _timeForRound = 5f;
@@ -19,6 +21,8 @@ public class PhysicsPlayer : PhysicsBody {
     
     private int _direction = 1;
     private float _jumpAcceleration;
+
+    private bool _isDead = false;
 
     private void Awake() {
         base.Awake();
@@ -36,6 +40,22 @@ public class PhysicsPlayer : PhysicsBody {
     private void OnMove(float plummetSpeed, float rotationSpeed) 
     {
         transform.Translate(Vector3.up * plummetSpeed * Time.deltaTime);
+    }
+
+    private void OnDie()
+    {
+        if (_isDead) return;
+        _isDead = true;
+
+        float final = 0f;
+        float squaredAcceleration = final - 2 * _gravity * _deadJumpHeight;
+        _jumpAcceleration = Mathf.Sqrt(squaredAcceleration);
+           
+        _velocity.x = 0;
+        _velocity.y = _jumpAcceleration;
+        _jumpAcceleration = 0;
+
+        this.ignorePhysics = true;
     }
 
     private void OnSwipe(SwipeType type)
@@ -58,20 +78,27 @@ public class PhysicsPlayer : PhysicsBody {
 
     private void Update() 
     {
-        if (Collisions.bottom) {
-			_velocity.y = 0;
-            Debug.Log("can jump");
-		} else {
-            Debug.Log("can't jump");
-            _jumpAcceleration = 0;
+        // #if UNITY_ENGINE
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            OnDie();
         }
+        // #endif
 
-        _velocity.x = _direction * _moveSpeed;
+        if (!_isDead) 
+        {
+            if (Collisions.bottom) {
+			    _velocity.y = 0;
+		    } else {
+                _jumpAcceleration = 0;
+            }
 
-        if (_jumpAcceleration > 0) {
-            _velocity.y = _jumpAcceleration;
-            _animation.SetTrigger("jump");
-            _jumpAcceleration = 0;
+            _velocity.x = _direction * _moveSpeed;
+         
+            if (_jumpAcceleration > 0) {
+                _velocity.y = _jumpAcceleration;
+                _animation.SetTrigger("jump");
+                _jumpAcceleration = 0;
+            }
         }
         
         _velocity.y += _gravity * Time.deltaTime;

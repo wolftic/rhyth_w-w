@@ -6,10 +6,13 @@ public class Tower : MonoBehaviour {
     [SerializeField]
     private AudioClip _music;
 
+    private void Awake()
+    {
+        TowerController.Instance.Init(_music);
+    }
+
     private void Start() {
         TowerController.Instance.OnMoveTower += OnMove;
-
-        MusicController.Instance.Play(_music);
     }
 
     private void OnMove(float plummetSpeed, float rotationSpeed) {
