@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class GameController : Singleton<GameController> {
+    public event System.Action<int> OnPlayerDie;
+    
     [SerializeField]
     private Text _swipeToStart;
     
@@ -24,6 +26,11 @@ public class GameController : Singleton<GameController> {
                 GestureController.Instance.OnSwipe -= OnSwipe;
             break;
         }
+    }
+
+    public void KillPlayer(int uuid)
+    {
+        if (OnPlayerDie != null) OnPlayerDie(uuid);
     }
 
     private void OnDestroy() {

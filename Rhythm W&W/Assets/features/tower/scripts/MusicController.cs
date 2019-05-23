@@ -8,7 +8,7 @@ public class MusicController : Singleton<MusicController> {
 
     private AudioSource _audioSource;
     private bool _isPlaying = false;
-    private float _clipLoudnessTreshold = .18f;
+    private float _clipLoudnessTreshold = .26f;
 
     private float _clipLoudness;
     private float[] _clipSampleData;
@@ -16,6 +16,7 @@ public class MusicController : Singleton<MusicController> {
 
     private void Awake() {
         _audioSource = GetComponent<AudioSource>();
+        _audioSource.loop = true;
     }
 
     public void Play(AudioClip clip) 
@@ -46,6 +47,8 @@ public class MusicController : Singleton<MusicController> {
         }
         
         _clipLoudness /= _sampleDataLength; 
+
+        Debug.Log("_clipLoudness: " + _clipLoudness);
 
         if (_clipLoudness >= _clipLoudnessTreshold)
         {

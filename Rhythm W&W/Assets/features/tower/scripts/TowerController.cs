@@ -6,7 +6,7 @@ using UnityEngine;
 public class TowerController : Singleton<TowerController> {
     public System.Action<float, float> OnMoveTower;
     
-    private float _plummetSpeed = -3f;
+    private float _plummetSpeed = -4f;
     private float _rotationSpeed = 0f;
     
     private AudioClip _music;
