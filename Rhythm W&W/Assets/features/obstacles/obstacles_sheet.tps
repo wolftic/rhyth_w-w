@@ -108,7 +108,7 @@
             <key>sizeConstraints</key>
             <enum type="AlgorithmSettings::SizeConstraints">POT</enum>
             <key>forceSquared</key>
-            <false/>
+            <true/>
             <key>maxRects</key>
             <struct type="AlgorithmMaxRectsSettings">
                 <key>heuristic</key>
@@ -175,43 +175,33 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">sprites/spies_gras.png</key>
-            <key type="filename">sprites/spikes_slime.png</key>
+            <key type="filename">sprites/prop_spikes_donkerblauw.png</key>
+            <key type="filename">sprites/prop_spikes_geel.png</key>
+            <key type="filename">sprites/prop_spikes_groen.png</key>
+            <key type="filename">sprites/prop_spikes_paars.png</key>
+            <key type="filename">sprites/prop_spikes_rood.png</key>
+            <key type="filename">sprites/prop_spikes_roze.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>147,42,295,84</rect>
+                <rect>96,27,191,54</rect>
                 <key>scale9Paddings</key>
-                <rect>147,42,295,84</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">sprites/spikes_grass.png</key>
-            <key type="filename">sprites/spikes_ijs.png</key>
-            <key type="filename">sprites/spikes_lava.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>147,42,295,83</rect>
-                <key>scale9Paddings</key>
-                <rect>147,42,295,83</rect>
+                <rect>96,27,191,54</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
         </map>
         <key>fileList</key>
         <array>
-            <filename>sprites/spikes_grass.png</filename>
-            <filename>sprites/spikes_ijs.png</filename>
-            <filename>sprites/spikes_lava.png</filename>
-            <filename>sprites/spikes_slime.png</filename>
-            <filename>sprites/spies_gras.png</filename>
+            <filename>sprites/prop_spikes_groen.png</filename>
+            <filename>sprites/prop_spikes_paars.png</filename>
+            <filename>sprites/prop_spikes_rood.png</filename>
+            <filename>sprites/prop_spikes_roze.png</filename>
+            <filename>sprites/prop_spikes_donkerblauw.png</filename>
+            <filename>sprites/prop_spikes_geel.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
