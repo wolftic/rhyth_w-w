@@ -14,6 +14,7 @@ public class LevelSelectTransitionHandler : MonoBehaviour {
     public int CollectibleAmount;
 
     public Action<int> LevelSelected;
+    public Action ExitPressed;
 
 
     private Text _scoreText;
@@ -36,9 +37,9 @@ public class LevelSelectTransitionHandler : MonoBehaviour {
 
 	void Start () {
         _levelWindow = transform.Find("levelprefab").gameObject;
-        _scoreText = transform.Find("collectibles/scoretext").GetComponent<Text>();
-        _sprite = _levelWindow.GetComponent<Image>();
-        _levelName = _levelWindow.transform.Find("levelname").GetComponent<Text>();
+        _scoreText = transform.Find("levelprefab/kader/collected/requiredcollectibles").GetComponent<Text>();
+        _sprite = transform.Find("levelprefab/kader").GetComponent<Image>();
+        _levelName = _levelWindow.transform.Find("kader/levelname").GetComponent<Text>();
         _maskedImage = _levelWindow.transform.Find("mask/levelimage").GetComponent<Image>();
         _lockIcon = _levelWindow.transform.Find("mask/locked").gameObject;
         _spriteWidth = _sprite.preferredWidth;
@@ -71,11 +72,17 @@ public class LevelSelectTransitionHandler : MonoBehaviour {
         {
             _lockIcon.SetActive(true);
         }
+        SetScoreText(CollectibleAmount, UnlockThreshHold[_levelIndex]);
     }
 
     public void OnLevelSelected()
     {
         LevelSelected(_levelIndex);
+    }
+    
+    public void OnExitMenu()
+    {
+        ExitPressed();
     }
 
     public void OnBackPress()
