@@ -34,9 +34,12 @@ public class PhysicsPlayer : PhysicsBody {
     {
         _moveSpeed = (2 * Mathf.PI) / _timeForRound * 5;
         
+        _isDead = true;
+            
         GestureController.Instance.OnSwipe += OnSwipe;
         TowerController.Instance.OnMoveTower += OnMove;
         GameController.Instance.OnPlayerDie += OnPlayerDie;
+        GameController.Instance.OnResetPlayer += OnResetPlayer;
     }
 
     private void OnMove(float plummetSpeed, float rotationSpeed) 
@@ -49,6 +52,17 @@ public class PhysicsPlayer : PhysicsBody {
         if (uuid != gameObject.GetInstanceID()) return;
 
         OnDie();
+    }
+
+    private void OnResetPlayer(Vector3 spawn) 
+    {
+        _isDead = false;
+        _animation.SetBool("dead", false);
+        transform.position = spawn;
+
+        _velocity.x = 0;
+        _velocity.y = 0;
+        this.ignorePhysics = false;
     }
 
     private void OnDie()
@@ -153,6 +167,7 @@ public class PhysicsPlayer : PhysicsBody {
         if (GameController.HasInstance())
         {
             GameController.Instance.OnPlayerDie -= OnPlayerDie;
+            GameController.Instance.OnResetPlayer -= OnResetPlayer;
         }
     }
 }

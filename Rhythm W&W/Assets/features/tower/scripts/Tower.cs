@@ -6,7 +6,7 @@ public class Tower : MonoBehaviour {
     [SerializeField]
     private AudioClip _music;
 
-    private void Awake()
+    private void OnEnable()
     {
         TowerController.Instance.Init(_music);
     }
@@ -18,6 +18,11 @@ public class Tower : MonoBehaviour {
     private void OnMove(float plummetSpeed, float rotationSpeed) {
         transform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
         transform.Translate(0, plummetSpeed * Time.deltaTime, 0);
+    }
+
+    public void Reset()
+    {
+        transform.position = Vector3.zero;
     }
 
     private void OnDestroy() {

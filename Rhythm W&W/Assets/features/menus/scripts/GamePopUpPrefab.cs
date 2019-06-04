@@ -5,38 +5,28 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class GamePopUpPrefab : MonoBehaviour {
+    [SerializeField]
+    private GameObject _winText, _loseText;
 
-    public Action<string> ButtonPressed;
-
-    private GameObject _winText;
-    private GameObject _loseText;
-
-    private Text _levelName;
-    private Text _scoreAmount;
+    [SerializeField]
+    private Text _levelName, _scoreAmount;
     
-	void Awake () {
-        _levelName = transform.Find("bg/lvl").GetComponent<Text>();
-        _scoreAmount = transform.Find("bg/scoreamount").GetComponent<Text>();
-        _winText = transform.Find("gewonnen").gameObject;
-        _loseText = transform.Find("verloren").gameObject;
-	}
-	
     public void Set(string levelName, int playerScore, int maxScore, bool won)
     {
         _levelName.text = levelName;
         _scoreAmount.text = playerScore + "/" + maxScore;
-        if (won)
-        {
-            _winText.SetActive(true); _loseText.SetActive(false);
-        }
-        else
-        {
-            _winText.SetActive(false); _loseText.SetActive(true);
-        } 
+        _winText.SetActive(won);
+        _loseText.SetActive(!won);
     }
 
-    public void OnButtonPressed(string buttonName) // de twee button namen zijn "retry" "continue"
+    public void Retry()
     {
-        ButtonPressed(buttonName);
+        GameController.Instance.Restart();
+    }
+
+    public void Continue()
+    {
+        GameController.Instance.OpenLevelSelect();
+        // GameController.Instance.
     }
 }
