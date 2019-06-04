@@ -6,6 +6,7 @@ public class GestureController : Singleton<GestureController>
 {
     private Vector2 _touchStartPos;
     private Vector2 _touchEndPos;
+    private bool _swiping = false;
 
     [SerializeField]
     private float _minSwipeDistanceX, _minSwipeDistanceY;
@@ -22,8 +23,12 @@ public class GestureController : Singleton<GestureController>
     {
         if (TouchBegin())
         {
+            _swiping = true;
             _touchStartPos = TouchPos();
         }
+
+        if (!_swiping) return;
+
         if (TouchMove() || TouchEnd())
         {
             _touchEndPos = TouchPos();
@@ -56,6 +61,7 @@ public class GestureController : Singleton<GestureController>
 
     private void DoSwipe(SwipeType type)
     {
+        _swiping = false;
         if (OnSwipe != null)
         {
             OnSwipe(type);
