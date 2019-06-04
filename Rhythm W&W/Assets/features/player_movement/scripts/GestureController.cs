@@ -24,7 +24,7 @@ public class GestureController : Singleton<GestureController>
         {
             _touchStartPos = TouchPos();
         }
-        if (TouchEnd())
+        if (TouchMove() || TouchEnd())
         {
             _touchEndPos = TouchPos();
             Vector3 delta = _touchEndPos - _touchStartPos;
