@@ -5,164 +5,173 @@ using UnityEngine.UI;
 using System;
 
 public class LevelSelectTransitionHandler : MonoBehaviour {
-    private float _standardSize;
-    private float _startPosition;
-
-    private GameObject _lockIcon;
-    private GameObject _levelWindow;
-
-    public int CollectibleAmount;
+    private float _standardSize, _startPosition, _spriteWidth;
+    [SerializeField]
+    private GameObject _lockIcon, _levelWindow;
+    [SerializeField]
+    private Text _scoreText, _levelName;
+    [SerializeField]
+    private Image _maskedImage, _sprite;
 
     public Action<int> LevelSelected;
     public Action ExitPressed;
 
+    private int _levelIndex = 0;
+    private int _collectibleAmount = 0;
+    private Level[] _levels;
 
-    private Text _scoreText;
-    private Text _levelName;
-    private Image _maskedImage;
-    private Image _sprite;
-    private float _spriteWidth;
+    [SerializeField]
+    private bool _isAnimating;
+    [SerializeField]
+    private float _swivelSpeed;
+    [SerializeField]
+    private float _smallestSize;
 
-    private int _levelIndex;
+	public void Init (int collected, Level[] levels) 
+    {   
+        Reset();
 
-    public Sprite[] images;
-    public int[] UnlockThreshHold;
-
-    public bool IsAnimating;
-
-    [SerializeField] private float _swivelSpeed;
-    [SerializeField] private float _smallestSize;
-
-
-
-	void Start () {
-        _levelWindow = transform.Find("levelprefab").gameObject;
-        _scoreText = transform.Find("levelprefab/kader/collected/requiredcollectibles").GetComponent<Text>();
-        _sprite = transform.Find("levelprefab/kader").GetComponent<Image>();
-        _levelName = _levelWindow.transform.Find("kader/levelname").GetComponent<Text>();
-        _maskedImage = _levelWindow.transform.Find("mask/levelimage").GetComponent<Image>();
-        _lockIcon = _levelWindow.transform.Find("mask/locked").gameObject;
         _spriteWidth = _sprite.preferredWidth;
         _startPosition = _levelWindow.transform.position.x;
         _standardSize = _levelWindow.transform.localScale.x;
 
-        SetScoreText(CollectibleAmount, UnlockThreshHold[UnlockThreshHold.Length - 1]);
+        _collectibleAmount = collected;
+        _levels = levels;
 
         UpdateLevelData();
     }
 
-    void Update () {
-        if (Input.GetKeyDown(KeyCode.Space) && IsAnimating == false)
-        {
-            OnBackPress();
-        }
-	}
-
     public void SetScoreText(int amount, int max)
     {
-        _scoreText.text = amount + "/" + max;
+        _scoreText.text = String.Concat(amount, "/", max);
     }
 
     private void SeeIfUnlockable()
     {
-        if(CollectibleAmount >= UnlockThreshHold[_levelIndex])
+        if (_collectibleAmount >= _levels[_levelIndex].PointsToUnlock)
         {
             _lockIcon.SetActive(false);
         } else
         {
             _lockIcon.SetActive(true);
         }
-        SetScoreText(CollectibleAmount, UnlockThreshHold[_levelIndex]);
+        SetScoreText(_collectibleAmount, _levels[_levelIndex].PointsToUnlock);
+    }
+
+    private void UpdateLevelData()
+    {
+        _maskedImage.sprite = _levels[_levelIndex].Image;
+        _levelName.text = _levels[_levelIndex].Name;
+        SeeIfUnlockable();
     }
 
     public void OnLevelSelected()
     {
-        LevelSelected(_levelIndex);
+        if (_collectibleAmount < _levels[_levelIndex].PointsToUnlock) return;
+        if (LevelSelected != null) LevelSelected(_levelIndex);
     }
     
     public void OnExitMenu()
     {
-        ExitPressed();
+        // ExitPressed();
     }
 
     public void OnBackPress()
     {
-        if (IsAnimating) return;
-        if (_levelIndex == 0) _levelIndex = images.Length - 1; else _levelIndex--;
+        if (_isAnimating) return;
+        if (_levelIndex == 0) _levelIndex = _levels.Length - 1; else _levelIndex--;
         StartCoroutine(TransitionLeft(true));
-    }
-
-    public void UpdateLevelData()
-    {
-        _maskedImage.sprite = images[_levelIndex];
-        _levelName.text = "" + images[_levelIndex].name;
-        SeeIfUnlockable();
     }
 
     public void OnForwardPress()
     {
-        if (IsAnimating) return;
-        if (_levelIndex >= images.Length - 1) _levelIndex = 0; else _levelIndex++;
+        if (_isAnimating) return;
+        if (_levelIndex >= _levels.Length - 1) _levelIndex = 0; else _levelIndex++;
         StartCoroutine(TransitionRight(true));
     }
 
     private IEnumerator TransitionLeft(bool start)
     {
+        if (start) _isAnimating = true; 
+        else UpdateLevelData();
 
-        if (start) IsAnimating = true; else UpdateLevelData();
+        float newSize, newPosition;
         float timer = 0;
+        
         while (timer <= 1)
-
         {
             timer += Time.deltaTime * _swivelSpeed;
-            float newSize;
-            float newPosition;
+
             if (start)
             {
-                newSize = Mathf.Lerp(_standardSize, _smallestSize, timer);
-                newPosition = Mathf.Lerp(_startPosition, Screen.width + _spriteWidth / 4, timer);
+                newSize = Mathf.Lerp(_standardSize, _smallestSize, Ease(timer));
+                newPosition = Mathf.Lerp(_startPosition, Screen.width + _spriteWidth / 4, Ease(timer));
             }
             else
             {
-                newSize = Mathf.Lerp(_smallestSize, _standardSize, timer);
-                newPosition = Mathf.Lerp(Screen.width + _spriteWidth / 4, _startPosition, timer);
+                newSize = Mathf.Lerp(_smallestSize, _standardSize, Ease(timer));
+                newPosition = Mathf.Lerp(Screen.width + _spriteWidth / 4, _startPosition, Ease(timer));
             }
+            
             _levelWindow.transform.position = new Vector3(newPosition, _levelWindow.transform.position.y, transform.position.z);
             _levelWindow.transform.localScale = new Vector3(newSize, newSize, newSize);
+            
             yield return null;
         }
 
-
-        if (start) StartCoroutine(TransitionRight(false)); else IsAnimating = false;
+        if (start) StartCoroutine(TransitionRight(false));
+        else _isAnimating = false;
     } 
 
     private IEnumerator TransitionRight(bool start)
     {
-        if (start) IsAnimating = true; else UpdateLevelData();
+        if (start) _isAnimating = true; 
+        else UpdateLevelData();
 
+        float newSize, newPosition;
         float timer = 0;
-
+            
         while (timer <= 1)
         {
-
             timer += Time.deltaTime * _swivelSpeed;
-            float newSize;
-            float newPosition;
+            
             if (start)
             {
-                newSize = Mathf.Lerp(_standardSize, _smallestSize, timer);
-                newPosition = Mathf.Lerp(_startPosition, 0 - _spriteWidth / 4, timer);
+                newSize = Mathf.Lerp(_standardSize, _smallestSize, Ease(timer));
+                newPosition = Mathf.Lerp(_startPosition, 0 - _spriteWidth / 4, Ease(timer));
             }
             else
             {
-                newSize = Mathf.Lerp(_smallestSize, _standardSize, timer);
-                newPosition = Mathf.Lerp(0 - _spriteWidth / 4, _startPosition, timer);
+                newSize = Mathf.Lerp(_smallestSize, _standardSize, Ease(timer));
+                newPosition = Mathf.Lerp(0 - _spriteWidth / 4, _startPosition, Ease(timer));
             }
+            
             _levelWindow.transform.position = new Vector3(newPosition, _levelWindow.transform.position.y, transform.position.z);
             _levelWindow.transform.localScale = new Vector3(newSize, newSize, newSize);
+            
             yield return null;
-
         }
-        if (start) StartCoroutine(TransitionLeft(false)); else IsAnimating = false;
+
+        if (start) StartCoroutine(TransitionLeft(false));
+        else _isAnimating = false;
+    }
+
+    private float Ease(float value, float start = 0f, float end = 1f) 
+    {
+        value /= .5f;
+        end -= start;
+        if (value < 1) return end * 0.5f * value * value * value + start;
+        value -= 2;
+        return end * 0.5f * (value * value * value + 2) + start;
+    }
+
+    private void Reset()
+    {
+        _collectibleAmount = 0;
+        _levels = null;
+        _maskedImage.sprite = null;
+        _levelName.text = "";
+        _scoreText.text = "";
+        _lockIcon.SetActive(true);
     }
 }

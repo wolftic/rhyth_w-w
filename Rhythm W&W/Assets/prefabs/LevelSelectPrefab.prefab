@@ -688,13 +688,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1797e6311d4e6341872b8a24888217f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CollectibleAmount: 3
-  images:
+  _lockIcon: {fileID: 1115322224123422}
+  _levelWindow: {fileID: 1245470180988754}
+  _scoreText: {fileID: 114518507412908598}
+  _levelName: {fileID: 114440652831207554}
+  _maskedImage: {fileID: 114491892414599022}
+  _sprite: {fileID: 114758211010178134}
+  _images:
   - {fileID: 21300000, guid: 8bbffd726282ba0489ecf666a76428f0, type: 3}
   - {fileID: 21300000, guid: 8efb3812742946e4cad73806e5c21764, type: 3}
   - {fileID: 21300000, guid: 882b2262e7beeda49bfc304c834a4ead, type: 3}
-  UnlockThreshHold: 000000000500000014000000
-  IsAnimating: 0
+  _unlockThreshHold: 000000000500000014000000
+  _isAnimating: 0
+  _collectibleAmount: 0
   _swivelSpeed: 2
   _smallestSize: 0.2
 --- !u!114 &114758211010178134
