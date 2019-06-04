@@ -88,12 +88,6 @@ public class PhysicsPlayer : PhysicsBody {
 
     private void Update() 
     {
-#if UNITY_EDITOR
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            OnDie();
-        }
-#endif
-
         if (!_isDead) WhileLiving();
         else WhileDead();
         
@@ -109,7 +103,7 @@ public class PhysicsPlayer : PhysicsBody {
     {
         if (transform.position.y <= .88f) 
         {
-            OnDie();
+            GameController.Instance.KillPlayer(gameObject.GetInstanceID());
             return;
         }
 
