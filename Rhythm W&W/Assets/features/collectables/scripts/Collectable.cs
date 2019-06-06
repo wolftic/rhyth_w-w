@@ -15,6 +15,11 @@ public class Collectable : MonoBehaviour
         _playerLayer = LayerMask.NameToLayer("Player");
     }
 
+    private void Start()
+    {
+        CollectableController.Instance.AddCollectable(this);
+    }
+
     private void OnPickup() 
     {
         gameObject.SetActive(false);
@@ -25,5 +30,10 @@ public class Collectable : MonoBehaviour
     {
         if (other.gameObject.layer != _playerLayer) return;
         OnPickup();
+    }
+
+    private void OnDestroy()
+    {
+        CollectableController.Instance.RemoveCollectable(this);
     }
 }

@@ -33,13 +33,36 @@ public class PhysicsPlayer : PhysicsBody {
     void Start()
     {
         _moveSpeed = (2 * Mathf.PI) / _timeForRound * 5;
+        
+        _isDead = true;
+            
         GestureController.Instance.OnSwipe += OnSwipe;
         TowerController.Instance.OnMoveTower += OnMove;
+        GameController.Instance.OnPlayerDie += OnPlayerDie;
+        GameController.Instance.OnResetPlayer += OnResetPlayer;
     }
 
     private void OnMove(float plummetSpeed, float rotationSpeed) 
     {
         transform.Translate(Vector3.up * plummetSpeed * Time.deltaTime);
+    }
+
+    private void OnPlayerDie(int uuid)
+    {
+        if (uuid != gameObject.GetInstanceID()) return;
+
+        OnDie();
+    }
+
+    private void OnResetPlayer(Vector3 spawn) 
+    {
+        _isDead = false;
+        _animation.SetBool("dead", false);
+        transform.position = spawn;
+
+        _velocity.x = 0;
+        _velocity.y = 0;
+        this.ignorePhysics = false;
     }
 
     private void OnDie()
@@ -55,6 +78,7 @@ public class PhysicsPlayer : PhysicsBody {
         _velocity.y = _jumpAcceleration;
         _jumpAcceleration = 0;
 
+        _animation.SetBool("dead", true);
         this.ignorePhysics = true;
     }
 
@@ -78,33 +102,38 @@ public class PhysicsPlayer : PhysicsBody {
 
     private void Update() 
     {
-        // #if UNITY_ENGINE
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            OnDie();
-        }
-        // #endif
-
-        if (!_isDead) 
-        {
-            if (Collisions.bottom) {
-			    _velocity.y = 0;
-		    } else {
-                _jumpAcceleration = 0;
-            }
-
-            _velocity.x = _direction * _moveSpeed;
-         
-            if (_jumpAcceleration > 0) {
-                _velocity.y = _jumpAcceleration;
-                _animation.SetTrigger("jump");
-                _jumpAcceleration = 0;
-            }
-        }
+        if (!_isDead) WhileLiving();
+        else WhileDead();
         
         _velocity.y += _gravity * Time.deltaTime;
 
         HandleAnimations();
         this.Move(_velocity * Time.deltaTime);
+    }
+
+    private void WhileDead() {}
+
+    private void WhileLiving() 
+    {
+        if (transform.position.y <= .88f) 
+        {
+            GameController.Instance.KillPlayer(gameObject.GetInstanceID());
+            return;
+        }
+
+        if (Collisions.bottom) {
+            _velocity.y = 0;
+        } else {
+            _jumpAcceleration = 0;
+        }
+
+        _velocity.x = _direction * _moveSpeed;
+        
+        if (_jumpAcceleration > 0) {
+            _velocity.y = _jumpAcceleration;
+            _animation.SetTrigger("jump");
+            _jumpAcceleration = 0;
+        }
     }
 
     public override void Move(Vector3 velocity)
@@ -134,5 +163,11 @@ public class PhysicsPlayer : PhysicsBody {
         {
             TowerController.Instance.OnMoveTower -= OnMove;
         }  
+
+        if (GameController.HasInstance())
+        {
+            GameController.Instance.OnPlayerDie -= OnPlayerDie;
+            GameController.Instance.OnResetPlayer -= OnResetPlayer;
+        }
     }
 }

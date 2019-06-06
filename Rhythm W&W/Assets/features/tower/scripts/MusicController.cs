@@ -8,7 +8,7 @@ public class MusicController : Singleton<MusicController> {
 
     private AudioSource _audioSource;
     private bool _isPlaying = false;
-    private float _clipLoudnessTreshold = .18f;
+    private float _clipLoudnessTreshold = .26f;
 
     private float _clipLoudness;
     private float[] _clipSampleData;
@@ -16,6 +16,10 @@ public class MusicController : Singleton<MusicController> {
 
     private void Awake() {
         _audioSource = GetComponent<AudioSource>();
+        _audioSource.loop = true;
+
+        GameController.Instance.OnPlayerWin += OnPlayerWin;
+        GameController.Instance.OnPlayerDie += OnPlayerDie;
     }
 
     public void Play(AudioClip clip) 
@@ -30,8 +34,12 @@ public class MusicController : Singleton<MusicController> {
 
     public void Stop() 
     {
+        _audioSource.Stop();
         _isPlaying = false;
     }
+
+    private void OnPlayerWin() { Stop(); }
+    private void OnPlayerDie(int uuid) { Stop(); }
 
     private void Update() 
     {
@@ -50,6 +58,15 @@ public class MusicController : Singleton<MusicController> {
         if (_clipLoudness >= _clipLoudnessTreshold)
         {
             if (OnSoundBurst != null) OnSoundBurst();
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (GameController.HasInstance())
+        {
+            GameController.Instance.OnPlayerWin += OnPlayerWin;
+            GameController.Instance.OnPlayerDie += OnPlayerDie;
         }
     }
 }
