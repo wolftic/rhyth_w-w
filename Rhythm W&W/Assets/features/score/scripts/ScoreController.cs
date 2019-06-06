@@ -22,9 +22,11 @@ public class ScoreController : Singleton<ScoreController>
         if (OnScoreChanged != null) OnScoreChanged(scoreCount);
     }
 
-    private void Update()
+    private void OnDestroy()
     {
-
+        if (CollectableController.HasInstance())
+        {
+            CollectableController.Instance.OnPickup -= OnPickup;
+        }
     }
-
 }

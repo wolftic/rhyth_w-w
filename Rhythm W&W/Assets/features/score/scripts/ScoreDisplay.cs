@@ -7,13 +7,21 @@ public class ScoreDisplay : MonoBehaviour
 {
     public Text scoreText;
 
-    void Start()
+    private void Start()
     {
         ScoreController.Instance.OnScoreChanged += OnScoreChanged;
     }
 
-    void OnScoreChanged(int scoreCount)
+    private void OnScoreChanged(int scoreCount)
     {
         scoreText.text = "Score: " + scoreCount.ToString();
+    }
+    
+    private void OnDestroy() 
+    {
+        if (ScoreController.HasInstance())
+        {
+            ScoreController.Instance.OnScoreChanged -= OnScoreChanged;
+        }
     }
 }
