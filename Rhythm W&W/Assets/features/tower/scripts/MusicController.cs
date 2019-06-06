@@ -5,10 +5,12 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class MusicController : Singleton<MusicController> {
     public System.Action OnSoundBurst;
+    public System.Action OnRegularSound;
+
 
     private AudioSource _audioSource;
     private bool _isPlaying = false;
-    private float _clipLoudnessTreshold = .26f;
+    private float _clipLoudnessTreshold = .20f;
 
     private float _clipLoudness;
     private float[] _clipSampleData;
@@ -58,6 +60,9 @@ public class MusicController : Singleton<MusicController> {
         if (_clipLoudness >= _clipLoudnessTreshold)
         {
             if (OnSoundBurst != null) OnSoundBurst();
+        } else
+        {
+            if (OnRegularSound != null) OnRegularSound();
         }
     }
 
