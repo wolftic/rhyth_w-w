@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Easy to use script to rotate and place the sprite on the tower based on location
+/// </summary>
 [ExecuteInEditMode]
 public class TowerProjector : MonoBehaviour
 {
@@ -26,7 +29,9 @@ public class TowerProjector : MonoBehaviour
         ApplyTranslation();
     }
 
-    [ContextMenu("Get new radius")]
+    /// <summary>
+    /// Get tower radius
+    /// </summary>
     private void GetRadius() 
     {
         GameObject tower = GameObject.FindGameObjectWithTag("Tower");
@@ -37,6 +42,9 @@ public class TowerProjector : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Apply rotation and position to the sprite
+    /// </summary>
     private void ApplyTranslation()
     {
         Vector3 position = transform.position;

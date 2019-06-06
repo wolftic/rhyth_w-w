@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Keeps all the information for a level
+/// </summary>
 public class Level : MonoBehaviour {
     public string Name;
     public int PointsToUnlock;

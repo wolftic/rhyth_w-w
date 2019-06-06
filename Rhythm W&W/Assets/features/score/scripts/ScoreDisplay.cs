@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Displays the score on the UI
+/// </summary>
 public class ScoreDisplay : MonoBehaviour
 {
     public Text scoreText;
@@ -14,6 +17,10 @@ public class ScoreDisplay : MonoBehaviour
         GameController.Instance.OnGameStateChange += OnGameStateChange;
     }
 
+    /// <summary>
+    /// Triggered when the game state changes
+    /// </summary>
+    /// <param name="obj"></param>
     private void OnGameStateChange(GameState obj)
     {
         switch(obj) 
@@ -27,6 +34,10 @@ public class ScoreDisplay : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Triggered when the score changes
+    /// </summary>
+    /// <param name="scoreCount"></param>
     private void OnScoreChanged(int scoreCount)
     {
         scoreText.text = "Score: " + scoreCount.ToString();

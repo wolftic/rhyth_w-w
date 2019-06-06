@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This handles the state of the rocket
+/// </summary>
 [RequireComponent(typeof(RocketFly))]
 public class Rocket : MonoBehaviour {
     private SpriteRenderer _renderer;
@@ -26,13 +29,19 @@ public class Rocket : MonoBehaviour {
         SetWin(false);
     }
 
-    [ContextMenu("win")]
+    /// <summary>
+    /// Gets triggered when the player wins and starts the winning sequence
+    /// </summary>
     private void OnPlayerWin() 
     {
         SetWin(true);
         _fly.StartSequence();
     }
 
+    /// <summary>
+    /// Changes the skin of the rocket
+    /// </summary>
+    /// <param name="win">Did the player win?</param>
     private void SetWin(bool win) 
     {
         _renderer.sprite = win ? _winState : _defaultState;

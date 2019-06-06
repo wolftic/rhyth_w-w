@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 
+/// <summary>
+/// Handles everything from level selection popup
+/// </summary>
 public class LevelSelectTransitionHandler : MonoBehaviour {
     private float _standardSize, _startPosition, _spriteWidth;
     [SerializeField]
@@ -27,6 +30,11 @@ public class LevelSelectTransitionHandler : MonoBehaviour {
     [SerializeField]
     private float _smallestSize;
 
+    /// <summary>
+    /// Initialize the popup with information
+    /// </summary>
+    /// <param name="collected"></param>
+    /// <param name="levels"></param>
 	public void Init (int collected, Level[] levels) 
     {   
         Reset();
@@ -41,11 +49,19 @@ public class LevelSelectTransitionHandler : MonoBehaviour {
         UpdateLevelData();
     }
 
+    /// <summary>
+    /// Change the score text
+    /// </summary>
+    /// <param name="amount"></param>
+    /// <param name="max"></param>
     public void SetScoreText(int amount, int max)
     {
         _scoreText.text = String.Concat(amount, "/", max);
     }
 
+    /// <summary>
+    /// Check if current selected level is locked
+    /// </summary>
     private void SeeIfUnlockable()
     {
         if (_collectibleAmount >= _levels[_levelIndex].PointsToUnlock)
@@ -58,6 +74,9 @@ public class LevelSelectTransitionHandler : MonoBehaviour {
         SetScoreText(_collectibleAmount, _levels[_levelIndex].PointsToUnlock);
     }
 
+    /// <summary>
+    /// Update all info in the current selected level
+    /// </summary>
     private void UpdateLevelData()
     {
         _maskedImage.sprite = _levels[_levelIndex].Image;
@@ -65,17 +84,26 @@ public class LevelSelectTransitionHandler : MonoBehaviour {
         SeeIfUnlockable();
     }
 
+    /// <summary>
+    /// On selecting a level
+    /// </summary>
     public void OnLevelSelected()
     {
         if (_collectibleAmount < _levels[_levelIndex].PointsToUnlock) return;
         if (LevelSelected != null) LevelSelected(_levelIndex);
     }
     
+    /// <summary>
+    /// Triggered by the exit button in game
+    /// </summary>
     public void OnExitMenu()
     {
         // ExitPressed();
     }
 
+    /// <summary>
+    /// Triggered by the left button
+    /// </summary>
     public void OnBackPress()
     {
         if (_isAnimating) return;
@@ -83,6 +111,9 @@ public class LevelSelectTransitionHandler : MonoBehaviour {
         StartCoroutine(TransitionLeft(true));
     }
 
+    /// <summary>
+    /// Triggered by the right button
+    /// </summary>
     public void OnForwardPress()
     {
         if (_isAnimating) return;

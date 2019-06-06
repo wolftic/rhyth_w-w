@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Handles all the music in the game
+/// </summary>
+/// <typeparam name="MusicController"></typeparam>
 [RequireComponent(typeof(AudioSource))]
 public class MusicController : Singleton<MusicController> {
     public System.Action OnSoundBurst;
     public System.Action OnRegularSound;
-
 
     private AudioSource _audioSource;
     private bool _isPlaying = false;
@@ -24,6 +27,10 @@ public class MusicController : Singleton<MusicController> {
         GameController.Instance.OnPlayerDie += OnPlayerDie;
     }
 
+    /// <summary>
+    /// Play an audioclip
+    /// </summary>
+    /// <param name="clip"></param>
     public void Play(AudioClip clip) 
     {
         _clipSampleData = new float[1024];
@@ -34,13 +41,23 @@ public class MusicController : Singleton<MusicController> {
         _isPlaying = true;
     }
 
+    /// <summary>
+    /// Stops the music
+    /// </summary>
     public void Stop() 
     {
         _audioSource.Stop();
         _isPlaying = false;
     }
 
+    /// <summary>
+    /// Triggered when the player wins
+    /// </summary>
     private void OnPlayerWin() { Stop(); }
+    /// <summary>
+    /// Triggered when the player dies
+    /// </summary>
+    /// <param name="uuid"></param>
     private void OnPlayerDie(int uuid) { Stop(); }
 
     private void Update() 

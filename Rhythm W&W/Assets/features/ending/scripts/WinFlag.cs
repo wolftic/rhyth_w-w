@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Handles the the end point of a level
+/// </summary>
 [RequireComponent(typeof(BoxCollider))]
 public class WinFlag : MonoBehaviour {
     private BoxCollider _collider;
@@ -16,6 +19,10 @@ public class WinFlag : MonoBehaviour {
         _mask = LayerMask.GetMask("Player");
     }
 
+    /// <summary>
+    /// Triggers the win state
+    /// </summary>
+    /// <param name="player"></param>
     private void TriggerWin(PhysicsPlayer player) {
         player.gameObject.SetActive(false);
         GameController.Instance.TriggerWin();

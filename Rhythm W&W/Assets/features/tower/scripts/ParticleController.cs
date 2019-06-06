@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Handles all the particles
+/// </summary>
 public class ParticleController : MonoBehaviour {
     [SerializeField]
     private int _particleAmount = 5;
@@ -14,6 +17,9 @@ public class ParticleController : MonoBehaviour {
         MusicController.Instance.OnSoundBurst += BurstParticles;
 	}
 
+    /// <summary>
+    /// Activate the burst particles
+    /// </summary>
     private void BurstParticles()
     {
         _particleSystem.Emit(_particleAmount);

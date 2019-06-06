@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// The players physics and controller
+/// </summary>
 public class PhysicsPlayer : PhysicsBody {
     [SerializeField]
     private Vector3 _velocity;
@@ -42,11 +45,20 @@ public class PhysicsPlayer : PhysicsBody {
         GameController.Instance.OnResetPlayer += OnResetPlayer;
     }
 
+    /// <summary>
+    /// Triggered when the tower moves down
+    /// </summary>
+    /// <param name="plummetSpeed"></param>
+    /// <param name="rotationSpeed"></param>
     private void OnMove(float plummetSpeed, float rotationSpeed) 
     {
         transform.Translate(Vector3.up * plummetSpeed * Time.deltaTime);
     }
 
+    /// <summary>
+    /// Triggered when the player dies
+    /// </summary>
+    /// <param name="uuid"></param>
     private void OnPlayerDie(int uuid)
     {
         if (uuid != gameObject.GetInstanceID()) return;
@@ -54,6 +66,10 @@ public class PhysicsPlayer : PhysicsBody {
         OnDie();
     }
 
+    /// <summary>
+    /// Triggered when the player should respawn
+    /// </summary>
+    /// <param name="spawn"></param>
     private void OnResetPlayer(Vector3 spawn) 
     {
         _isDead = false;
@@ -65,6 +81,9 @@ public class PhysicsPlayer : PhysicsBody {
         this.ignorePhysics = false;
     }
 
+    /// <summary>
+    /// Triggered when the player dies
+    /// </summary>
     private void OnDie()
     {
         if (_isDead) return;
@@ -82,6 +101,10 @@ public class PhysicsPlayer : PhysicsBody {
         this.ignorePhysics = true;
     }
 
+    /// <summary>
+    /// Triggered when the player swipes
+    /// </summary>
+    /// <param name="type"></param>
     private void OnSwipe(SwipeType type)
     {
         switch(type)
@@ -111,8 +134,14 @@ public class PhysicsPlayer : PhysicsBody {
         this.Move(_velocity * Time.deltaTime);
     }
 
+    /// <summary>
+    /// While player is dead
+    /// </summary>
     private void WhileDead() {}
 
+    /// <summary>
+    /// While player is living
+    /// </summary>
     private void WhileLiving() 
     {
         if (transform.position.y <= .88f) 
@@ -136,6 +165,10 @@ public class PhysicsPlayer : PhysicsBody {
         }
     }
 
+    /// <summary>
+    /// Move the player
+    /// </summary>
+    /// <param name="velocity"></param>
     public override void Move(Vector3 velocity)
     {
         base.Move(velocity);
@@ -148,6 +181,9 @@ public class PhysicsPlayer : PhysicsBody {
         transform.position = xz.normalized * 2.5f + Vector3.up * position.y;
     }
 
+    /// <summary>
+    /// Handle all player animations
+    /// </summary>
     private void HandleAnimations() {        
         _animation.SetBool("running", Mathf.Abs(_velocity.x) > 0);
         _renderer.flipX = _direction < 0;

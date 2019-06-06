@@ -10,6 +10,10 @@ public enum GameState {
     LEVEL_SELECT
 }
 
+/// <summary>
+/// Handles the entire game state
+/// </summary>
+/// <typeparam name="GameController"></typeparam>
 public class GameController : Singleton<GameController> {
     public event System.Action<GameState> OnGameStateChange;
     
@@ -44,6 +48,10 @@ public class GameController : Singleton<GameController> {
         OpenLevelSelect();
     }
     
+    /// <summary>
+    /// Event that gets triggered by the swiping gestures
+    /// </summary>
+    /// <param name="type">Type of swipe up, down, left and right</param>
     private void OnSwipe(SwipeType type)
     {
         switch(type)
@@ -58,18 +66,29 @@ public class GameController : Singleton<GameController> {
         }
     }
 
+    /// <summary>
+    /// Kill a player 
+    /// </summary>
+    /// <param name="uuid"></param>
     public void KillPlayer(int uuid)
     {
         if (OnPlayerDie != null) OnPlayerDie(uuid);
         OpenEndResult(false);
     }
 
+    /// <summary>
+    /// Triggers the win state
+    /// </summary>
     public void TriggerWin()
     {
         if (OnPlayerWin != null) OnPlayerWin();
         OpenEndResult(true);
     }
 
+    /// <summary>
+    /// Starts a level
+    /// </summary>
+    /// <param name="level">level id</param>
     public void PlayLevel(int level)
     {
         if (_levels != null && _levels.Length <= level) return;
@@ -86,6 +105,9 @@ public class GameController : Singleton<GameController> {
         SetGameState(GameState.IN_GAME);
     }
 
+    /// <summary>
+    /// Restarts the current level
+    /// </summary>
     public void Restart()
     {
         _gamePopup.gameObject.SetActive(false);
@@ -95,6 +117,10 @@ public class GameController : Singleton<GameController> {
         SetGameState(GameState.IN_GAME);
     }
 
+    /// <summary>
+    /// Open the ending window
+    /// </summary>
+    /// <param name="playerWon">Did the player win?</param>
     public void OpenEndResult(bool playerWon)
     {
         _levelSelectPopup.gameObject.SetActive(false);
@@ -107,6 +133,9 @@ public class GameController : Singleton<GameController> {
         SetGameState(GameState.END_SCREEN);
     }
 
+    /// <summary>
+    /// Open level selection window
+    /// </summary>
     public void OpenLevelSelect()
     {
         _gamePopup.gameObject.SetActive(false);
@@ -118,6 +147,10 @@ public class GameController : Singleton<GameController> {
         SetGameState(GameState.LEVEL_SELECT);
     }
 
+    /// <summary>
+    /// Change the state of the game
+    /// </summary>
+    /// <param name="type">State to change to</param>
     private void SetGameState(GameState type) 
     {
         _gameState = type;
@@ -125,6 +158,10 @@ public class GameController : Singleton<GameController> {
         if (OnGameStateChange != null) OnGameStateChange(type);
     }
     
+    /// <summary>
+    /// Reset every level and put player at a specific spawn point
+    /// </summary>
+    /// <param name="level">levels spawnpoint</param>
     private void ResetAll(int level = 0)
     {
         for (int i = 0; i < _levels.Length; i++)

@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Handles all the physics from a character
+/// </summary>
+[RequireComponent(typeof(BoxCollider))]
 public abstract class PhysicsBody : MonoBehaviour {
     private const int _raycastWidth = 5;
     private const float _skinWidth = 0.015f;
@@ -20,12 +24,20 @@ public abstract class PhysicsBody : MonoBehaviour {
         _collider = GetComponent<BoxCollider>();
     }
 
+    /// <summary>
+    /// Calculate physics from an velocity
+    /// </summary>
+    /// <param name="velocity">Input velocity</param>
     private void CalculatePhysics(ref Vector3 velocity) 
     {
         if (velocity.y != 0) VerticalCollision(ref velocity);
         if (velocity.x != 0) HorizontalCollision(ref velocity);
     }
 
+    /// <summary>
+    /// Calculate vertical collisions
+    /// </summary>
+    /// <param name="velocity">Input velocity</param>
     private void VerticalCollision(ref Vector3 velocity) 
     {
         RaycastHit hitInfo;
@@ -67,6 +79,10 @@ public abstract class PhysicsBody : MonoBehaviour {
 
     }
 
+    /// <summary>
+    /// Calculate horizontal collisions
+    /// </summary>
+    /// <param name="velocity">Input velocity</param>
     private void HorizontalCollision(ref Vector3 velocity) 
     {
         RaycastHit hitInfo;
@@ -108,6 +124,10 @@ public abstract class PhysicsBody : MonoBehaviour {
 
     }
 
+    /// <summary>
+    /// Move the gameobject in the direction of velocity
+    /// </summary>
+    /// <param name="velocity">Input velocity</param>
     public virtual void Move(Vector3 velocity) 
     {
         Collisions.Reset();

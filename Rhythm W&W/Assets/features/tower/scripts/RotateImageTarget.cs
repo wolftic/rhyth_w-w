@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Rotate image based on players position
+/// </summary>
 public class RotateImageTarget : MonoBehaviour {
     [SerializeField]
     private PhysicsPlayer _player;

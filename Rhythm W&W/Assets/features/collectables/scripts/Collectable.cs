@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// A script you can add to a sprite to make it a collectable item.
+/// </summary>
 [RequireComponent(typeof(Rigidbody), typeof(Collider))]
 public class Collectable : MonoBehaviour 
 {
@@ -20,6 +23,9 @@ public class Collectable : MonoBehaviour
         CollectableController.Instance.AddCollectable(this);
     }
 
+    /// <summary>
+    /// An event that gets called whenever the Collectable gets picked up
+    /// </summary>
     private void OnPickup() 
     {
         gameObject.SetActive(false);

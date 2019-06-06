@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Handles the tower
+/// </summary>
 public class Tower : MonoBehaviour {
     [SerializeField]
     private AudioClip _music;
@@ -15,6 +18,11 @@ public class Tower : MonoBehaviour {
         TowerController.Instance.OnMoveTower += OnMove;
     }
 
+    /// <summary>
+    /// Moves the tower down and rotates the tower if necessary
+    /// </summary>
+    /// <param name="plummetSpeed"></param>
+    /// <param name="rotationSpeed"></param>
     private void OnMove(float plummetSpeed, float rotationSpeed) {
         transform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
         transform.Translate(0, plummetSpeed * Time.deltaTime, 0);

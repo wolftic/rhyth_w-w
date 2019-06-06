@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// An obstacle that kills a player when touched
+/// </summary>
 [RequireComponent(typeof(BoxCollider))]
 public class Obstacle : MonoBehaviour {
     private BoxCollider _collider;
@@ -16,6 +19,10 @@ public class Obstacle : MonoBehaviour {
         _mask = LayerMask.GetMask("Player");
     }
 
+    /// <summary>
+    /// Kill the touched player
+    /// </summary>
+    /// <param name="player"></param>
     private void Kill(PhysicsPlayer player) {
         GameController.Instance.KillPlayer(player.gameObject.GetInstanceID());
     }

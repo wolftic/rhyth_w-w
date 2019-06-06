@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Handles the player gestures
+/// </summary>
+/// <typeparam name="GestureController">Singleton</typeparam>
 public class GestureController : Singleton<GestureController>
 {
     private Vector2 _touchStartPos;
@@ -59,6 +63,10 @@ public class GestureController : Singleton<GestureController>
         }
     }
 
+    /// <summary>
+    /// Triggered when player swipes
+    /// </summary>
+    /// <param name="type"></param>
     private void DoSwipe(SwipeType type)
     {
         _swiping = false;
@@ -68,6 +76,10 @@ public class GestureController : Singleton<GestureController>
         }
     }
 
+    /// <summary>
+    /// When the player touch begins
+    /// </summary>
+    /// <returns></returns>
     private bool TouchBegin()
     {
 #if UNITY_EDITOR
@@ -77,6 +89,10 @@ public class GestureController : Singleton<GestureController>
 #endif
     }
 
+    /// <summary>
+    /// When the players touch ends
+    /// </summary>
+    /// <returns></returns>
     private bool TouchEnd()
     {
 #if UNITY_EDITOR
@@ -86,6 +102,10 @@ public class GestureController : Singleton<GestureController>
 #endif
     }
 
+    /// <summary>
+    /// When the players touch moves
+    /// </summary>
+    /// <returns></returns>
     private bool TouchMove()
     {
 #if UNITY_EDITOR
@@ -95,6 +115,10 @@ public class GestureController : Singleton<GestureController>
 #endif
     }
 
+    /// <summary>
+    /// Players touch position
+    /// </summary>
+    /// <returns></returns>
     private Vector3 TouchPos()
     {
 #if UNITY_EDITOR
