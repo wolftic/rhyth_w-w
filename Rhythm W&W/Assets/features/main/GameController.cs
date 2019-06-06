@@ -111,7 +111,7 @@ public class GameController : Singleton<GameController> {
     {
         _gamePopup.gameObject.SetActive(false);
 
-        _levelSelectPopup.Init(0, _levels);
+        _levelSelectPopup.Init(20, _levels);
         _levelSelectPopup.LevelSelected += PlayLevel;
         _levelSelectPopup.gameObject.SetActive(true);
 

@@ -17,7 +17,7 @@ public class LevelSelectTransitionHandler : MonoBehaviour {
     public Action ExitPressed;
 
     private int _levelIndex = 0;
-    private int _collectibleAmount = 0;
+    private int _collectibleAmount = 20;
     private Level[] _levels;
 
     [SerializeField]
