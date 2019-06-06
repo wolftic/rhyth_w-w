@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 
 public class ScoreController : Singleton<ScoreController>
 {
-    public int scoreCount = 0;
+    public int ScoreCount = 0;
 
     public event System.Action<int> OnScoreChanged;
 
@@ -18,8 +19,13 @@ public class ScoreController : Singleton<ScoreController>
 
     private void OnPickup(int score)
     {
-        scoreCount += score;
-        if (OnScoreChanged != null) OnScoreChanged(scoreCount);
+        ScoreCount += score;
+        if (OnScoreChanged != null) OnScoreChanged(ScoreCount);
+    }
+
+    public void ResetScore()
+    {
+        ScoreCount = 0;
     }
 
     private void OnDestroy()
