@@ -7,7 +7,7 @@ public class MusicController : Singleton<MusicController>
 {
     public System.Action OnSoundBurst;
 
-    private AudioSource _audioSource;
+    public AudioSource _audioSource;
     private float _clipLoudnessTreshold = .26f;
     private bool _isPlaying = false;
     public bool isPlaying

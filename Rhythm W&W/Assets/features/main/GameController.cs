@@ -4,15 +4,17 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public enum GameState {
+public enum GameState
+{
     IN_GAME,
     END_SCREEN,
     LEVEL_SELECT
 }
 
-public class GameController : Singleton<GameController> {
+public class GameController : Singleton<GameController>
+{
     public event System.Action<GameState> OnGameStateChange;
-    
+
     public event System.Action<int> OnPlayerDie;
     public event System.Action OnPlayerWin;
     public event System.Action<Vector3> OnResetPlayer;
@@ -21,10 +23,10 @@ public class GameController : Singleton<GameController> {
     private GamePopUpPrefab _gamePopup;
     [SerializeField]
     private LevelSelectTransitionHandler _levelSelectPopup;
-    
+
     [SerializeField]
     private Text _swipeToStart;
-    
+
     [SerializeField]
     private Level[] _levels;
     [SerializeField]
@@ -33,7 +35,7 @@ public class GameController : Singleton<GameController> {
 
     private GameState _gameState;
 
-    private void Awake() 
+    private void Awake()
     {
         GestureController.Instance.OnSwipe += OnSwipe;
     }
@@ -43,25 +45,28 @@ public class GameController : Singleton<GameController> {
         ResetAll();
         OpenLevelSelect();
     }
-    
+
     private void OnSwipe(SwipeType type)
     {
-        switch(type)
+        switch (type)
         {
             case SwipeType.UP:
                 TowerController.Instance.Begin();
 
                 _swipeToStart.gameObject.SetActive(false);
-                
+
                 GestureController.Instance.OnSwipe -= OnSwipe;
-            break;
+                break;
         }
     }
 
     public void KillPlayer(int uuid)
     {
-        if (OnPlayerDie != null) OnPlayerDie(uuid);
-        OpenEndResult(false);
+        if (!PowerUpController.Instance._isPlayerInvincible)
+        {
+            if (OnPlayerDie != null) OnPlayerDie(uuid);
+            OpenEndResult(false);
+        }
     }
 
     public void TriggerWin()
@@ -80,7 +85,7 @@ public class GameController : Singleton<GameController> {
 
         _levels[_currentLevel].gameObject.SetActive(true);
         _swipeToStart.gameObject.SetActive(true);
-        
+
         GestureController.Instance.OnSwipe += OnSwipe;
 
         SetGameState(GameState.IN_GAME);
@@ -118,13 +123,13 @@ public class GameController : Singleton<GameController> {
         SetGameState(GameState.LEVEL_SELECT);
     }
 
-    private void SetGameState(GameState type) 
+    private void SetGameState(GameState type)
     {
         _gameState = type;
 
         if (OnGameStateChange != null) OnGameStateChange(type);
     }
-    
+
     private void ResetAll(int level = 0)
     {
         for (int i = 0; i < _levels.Length; i++)
@@ -145,7 +150,8 @@ public class GameController : Singleton<GameController> {
         if (OnResetPlayer != null) OnResetPlayer(_levels[level].SpawnPoint);
     }
 
-    private void OnDestroy() {
+    private void OnDestroy()
+    {
         if (GestureController.HasInstance())
         {
             GestureController.Instance.OnSwipe -= OnSwipe;

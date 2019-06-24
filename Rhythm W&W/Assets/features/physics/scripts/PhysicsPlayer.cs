@@ -2,47 +2,51 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PhysicsPlayer : PhysicsBody {
+public class PhysicsPlayer : PhysicsBody
+{
     [SerializeField]
     private Vector3 _velocity;
     [SerializeField]
     private float _jumpHeight;
     [SerializeField]
     private float _deadJumpHeight;
+    private bool canDoubleJump;
 
     [SerializeField]
     private float _timeForRound = 5f;
     private float _moveSpeed;
 
     private float _gravity = -50f;
-    
+
     private Animator _animation;
-    private SpriteRenderer _renderer;
-    
+    public SpriteRenderer _renderer;
+
     private int _direction = 1;
     private float _jumpAcceleration;
 
     private bool _isDead = false;
 
-    private void Awake() {
+    private void Awake()
+    {
         base.Awake();
         _animation = GetComponent<Animator>();
         _renderer = GetComponent<SpriteRenderer>();
+        PowerUpController.Instance.SpriteRendererPlayer = _renderer;
     }
 
     void Start()
     {
         _moveSpeed = (2 * Mathf.PI) / _timeForRound * 5;
-        
+
         _isDead = true;
-            
+
         GestureController.Instance.OnSwipe += OnSwipe;
         TowerController.Instance.OnMoveTower += OnMove;
         GameController.Instance.OnPlayerDie += OnPlayerDie;
         GameController.Instance.OnResetPlayer += OnResetPlayer;
     }
 
-    private void OnMove(float plummetSpeed, float rotationSpeed) 
+    private void OnMove(float plummetSpeed, float rotationSpeed)
     {
         transform.Translate(Vector3.up * plummetSpeed * Time.deltaTime);
     }
@@ -54,7 +58,7 @@ public class PhysicsPlayer : PhysicsBody {
         OnDie();
     }
 
-    private void OnResetPlayer(Vector3 spawn) 
+    private void OnResetPlayer(Vector3 spawn)
     {
         _isDead = false;
         _animation.SetBool("dead", false);
@@ -73,7 +77,7 @@ public class PhysicsPlayer : PhysicsBody {
         float final = 0f;
         float squaredAcceleration = final - 2 * _gravity * _deadJumpHeight;
         _jumpAcceleration = Mathf.Sqrt(squaredAcceleration);
-           
+
         _velocity.x = 0;
         _velocity.y = _jumpAcceleration;
         _jumpAcceleration = 0;
@@ -84,52 +88,58 @@ public class PhysicsPlayer : PhysicsBody {
 
     private void OnSwipe(SwipeType type)
     {
-        switch(type)
+        switch (type)
         {
             case SwipeType.UP:
-                float final = 0f;
-                float squaredAcceleration = final - 2 * _gravity * _jumpHeight;
-                _jumpAcceleration = Mathf.Sqrt(squaredAcceleration);
-            break;
+                if (Collisions.bottom || canDoubleJump)
+                {
+                    float final = 0f;
+                    float squaredAcceleration = final - 2 * _gravity * _jumpHeight;
+                    _jumpAcceleration = Mathf.Sqrt(squaredAcceleration);
+
+                    if (Collisions.bottom && PowerUpController.Instance.HasDoubleJumpPower) canDoubleJump = true;
+                    else canDoubleJump = false;
+                }
+                break;
             case SwipeType.LEFT:
                 _direction = -1;
-            break;
+                break;
             case SwipeType.RIGHT:
                 _direction = 1;
-            break;
+                break;
         }
     }
 
-    private void Update() 
+    private void Update()
     {
         if (!_isDead) WhileLiving();
         else WhileDead();
-        
+
         _velocity.y += _gravity * Time.deltaTime;
 
         HandleAnimations();
         this.Move(_velocity * Time.deltaTime);
     }
 
-    private void WhileDead() {}
+    private void WhileDead() { }
 
-    private void WhileLiving() 
+    private void WhileLiving()
     {
-        if (transform.position.y <= .88f) 
+        if (transform.position.y <= .88f)
         {
             GameController.Instance.KillPlayer(gameObject.GetInstanceID());
             return;
         }
 
-        if (Collisions.bottom) {
+        if (Collisions.bottom)
+        {
             _velocity.y = 0;
-        } else {
-            _jumpAcceleration = 0;
         }
 
         _velocity.x = _direction * _moveSpeed;
-        
-        if (_jumpAcceleration > 0) {
+
+        if (_jumpAcceleration > 0)
+        {
             _velocity.y = _jumpAcceleration;
             _animation.SetTrigger("jump");
             _jumpAcceleration = 0;
@@ -142,27 +152,29 @@ public class PhysicsPlayer : PhysicsBody {
 
         Vector3 position = transform.position;
         Vector3 xz = position;
-                xz.y = 0;
-        
+        xz.y = 0;
+
         transform.rotation = Quaternion.LookRotation(-xz, Vector3.up);
         transform.position = xz.normalized * 2.5f + Vector3.up * position.y;
     }
 
-    private void HandleAnimations() {        
+    private void HandleAnimations()
+    {
         _animation.SetBool("running", Mathf.Abs(_velocity.x) > 0);
         _renderer.flipX = _direction < 0;
     }
 
-    private void OnDestroy() {
-        if (GestureController.HasInstance()) 
+    private void OnDestroy()
+    {
+        if (GestureController.HasInstance())
         {
             GestureController.Instance.OnSwipe -= OnSwipe;
         }
-        
-        if (TowerController.HasInstance()) 
+
+        if (TowerController.HasInstance())
         {
             TowerController.Instance.OnMoveTower -= OnMove;
-        }  
+        }
 
         if (GameController.HasInstance())
         {
