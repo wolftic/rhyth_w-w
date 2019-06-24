@@ -18,8 +18,7 @@ public class PowerUpController : Singleton<PowerUpController>
     [SerializeField]
     private float _invinibleDurration = 7f;
     private float _invinibleEndTime;
-    public bool _isPlayerInvincible = false;
-    public SpriteRenderer SpriteRendererPlayer;
+    public bool IsPlayerInvincible = false;
 
     [SerializeField]
     private float _doubleJumpDurration = 7f;
@@ -83,14 +82,12 @@ public class PowerUpController : Singleton<PowerUpController>
     {
         if (isActive)
         {
-            _isPlayerInvincible = true;
+            IsPlayerInvincible = true;
             Debug.Log("Player is Invincible");
-            SpriteRendererPlayer.color = new Color(1f, 1f, 1f, .5f);
         }
         else
         {
-            SpriteRendererPlayer.color = new Color(1f, 1f, 1f, 1f);
-            _isPlayerInvincible = false;
+            IsPlayerInvincible = false;
         }
     }
 

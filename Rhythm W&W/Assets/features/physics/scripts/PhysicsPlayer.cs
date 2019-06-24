@@ -19,7 +19,7 @@ public class PhysicsPlayer : PhysicsBody
     private float _gravity = -50f;
 
     private Animator _animation;
-    public SpriteRenderer _renderer;
+    private SpriteRenderer _renderer;
 
     private int _direction = 1;
     private float _jumpAcceleration;
@@ -31,7 +31,6 @@ public class PhysicsPlayer : PhysicsBody
         base.Awake();
         _animation = GetComponent<Animator>();
         _renderer = GetComponent<SpriteRenderer>();
-        PowerUpController.Instance.SpriteRendererPlayer = _renderer;
     }
 
     void Start()
@@ -125,6 +124,14 @@ public class PhysicsPlayer : PhysicsBody
 
     private void WhileLiving()
     {
+        if (PowerUpController.Instance.IsPlayerInvincible)
+        {
+            _renderer.color = new Color(1f, 1f, 1f, .5f);
+        }
+        else
+        {
+            _renderer.color = new Color(1f, 1f, 1f, 1f);
+        }
         if (transform.position.y <= .88f)
         {
             GameController.Instance.KillPlayer(gameObject.GetInstanceID());

@@ -62,7 +62,7 @@ public class GameController : Singleton<GameController>
 
     public void KillPlayer(int uuid)
     {
-        if (!PowerUpController.Instance._isPlayerInvincible)
+        if (!PowerUpController.Instance.IsPlayerInvincible)
         {
             if (OnPlayerDie != null) OnPlayerDie(uuid);
             OpenEndResult(false);
